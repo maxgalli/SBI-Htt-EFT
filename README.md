@@ -4,6 +4,7 @@
 
 To setup the environment and the necessary software stack (on lxplus) run:
 ```
+cmssw-el8
 . setup.sh
 ```
 
