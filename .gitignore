@@ -9,3 +9,6 @@ __pycache__/
 # projects directories
 genproductions_scripts
 CMSSW_*
+*/crab.log
+*/crab_jobs
+*/*.root

@@ -80,23 +80,25 @@ process.genWeightsTable.namedWeightLabels = named_weights
 ```
 (TODO script to aumomate will be written).
 
+#### Scale out (TODO)
+
 ### Creating NanoAOD files
 
 In this part we summarize the procedure to produce nanoAOD files for a sample (i.e. with reconstruction included). The procedure can be find in different twikis, for convenience we base ours on [this](https://indico.cern.ch/event/1500035/contributions/6575125/attachments/3091743/5476084/IITH_GEN_Tutorial.pdf).
 Note that, in order for the commands to work and have tags and CMSSW versions that are compatible with each other, the best idea is to take a NanoAOD sample similar to what we want to generate and copy the config commands.
 This example is made using [this workflow](https://cms-pdmv-prod.web.cern.ch/mcm/chained_requests?prepid=HIG-chain_Run3Summer23BPixwmLHEGS_flowRun3Summer23BPixDRPremix_flowRun3Summer23BPixMiniAODv4_flowRun3Summer23BPixNanoAODv13-00001&page=0&shown=15), but could be different for other processes.
 
-SIM step:
+GENSIM step:
 ```
-cmsDriver.py \
-    --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_sim_cfg.py \
-    --eventcontent RAWSIM \
-    --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM \
-    --fileout file:sim.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision \
-    --step SIM --geometry DB:Extended --filein file:gen.root --era Run3_2023 --no_exec --mc -n 100
+cmsDriver.py Configuration/GenProduction/python/pythia_fragment.py \
+    --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_gensim_cfg.py \
+    --eventcontent RAWSIM,LHE \
+    --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE \
+    --fileout file:gensim.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision \
+    --step LHE,GEN,SIM --geometry DB:Extended --era Run3_2023 --no_exec --mc -n 10
 ```
 ```
-cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_sim_cfg.py
+cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_gensim_cfg.py
 ```
 
 DIGI-RAW step (TODO resources for careful and meaningful inclusion of pileup and HLT have to be found):
@@ -109,11 +111,11 @@ cmsDriver.py \
     --pileup_input "dbs:/Neutrino_E-10_gun/Run3Summer21PrePremix-Summer23BPix_130X_mcRun3_2023_realistic_postBPix_v1-v1/PREMIX" \
     --conditions 130X_mcRun3_2023_realistic_postBPix_v5 \
     --step DIGI,DATAMIX,L1,DIGI2RAW,HLT:2023v12 \
-    --procModifiers premix_stage2,siPixelQualityRawToDigi --geometry DB:Extended --filein file:sim.root \
+    --procModifiers premix_stage2,siPixelQualityRawToDigi --geometry DB:Extended --filein file:gensim.root \
     --datamix PreMix --era Run3_2023 --no_exec --mc -n 100
 ```
 ```
-cmsRun ppH_Htt_SMEFTsim_topU3l_quadrati_digi_cfg.py
+cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_digi_cfg.py
 ```
 
 RECO/AOD step:
@@ -158,11 +160,23 @@ named_weights = [
 process.genWeightsTable.namedWeightIDs = named_weights
 process.genWeightsTable.namedWeightLabels = named_weights
 ```
+
+Remember, for the purpose of having the dataset published on DBS, to add the following line to the config file:
+```
+fakeNameForCrab = cms.untracked.bool(True)
+```
+right underneath the line ```outputCommands = process.NANOAODSIMEventContent.outputCommands```.
+
 Finally, run:
 ```
 cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_nanoaod_cfg.py
 ```
 
-### Scale out (TODO)
+#### Scale out (TODO)
 
 Here we show how to use CRAB to produce NanoAOD with the relevant EFT weights. Relevant documentation can be found [here](https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3AdvancedTopic)
+
+Important notes:
+
+- remember to move the gridpacks to ```/eos/user/g/gallim/www/EFTstudies/gridpacks``` and change the path to the first gensim step to ```root://eosuser.cern.ch//eos/user/g/gallim/www/EFTstudies/gridpacks/<gpackname>``` when submitting on crab
+- for this to work, also change the line ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')``` to ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_xrootd.sh')```

@@ -82,7 +82,8 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         filterName = cms.untracked.string('')
     ),
     fileName = cms.untracked.string('file:nanoaod.root'),
-    outputCommands = process.NANOAODSIMEventContent.outputCommands
+    outputCommands = process.NANOAODSIMEventContent.outputCommands,
+    fakeNameForCrab = cms.untracked.bool(True)
 )
 
 # Additional output definition
