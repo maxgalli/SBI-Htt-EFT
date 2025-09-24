@@ -16,16 +16,16 @@ config.JobType.scriptExe   ='scriptExe.sh'
 config.JobType.allowUndistributedCMSSW = True
 
 config.JobType.numCores    = 1
-# as only 2500 are guaranteed to be available
-config.JobType.maxMemoryMB = 2500
+# only 2500 are guaranteed to be available
+config.JobType.maxMemoryMB = 4500
 
 config.Data.splitting   = 'EventBased'
 config.Data.unitsPerJob = 100
 NJOBS = 2
 config.Data.totalUnits  = config.Data.unitsPerJob * NJOBS
-config.Data.outLFNDirBase = '/store/user/gallim/SBI-Htt-EFT/test'
+config.Data.outLFNDirBase = '/store/user/gallim/SBI-Htt-EFT/test2'
 config.Data.publication = True
-config.Data.outputPrimaryDataset = 'PrimaryDatasetTest'
-config.Data.outputDatasetTag     = 'DatasetTagTest'
+config.Data.outputPrimaryDataset = 'PrimaryDatasetTest2'
+config.Data.outputDatasetTag     = 'DatasetTagTest2'
 
 config.Site.storageSite = 'T3_CH_PSI'

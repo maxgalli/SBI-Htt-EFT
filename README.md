@@ -82,6 +82,30 @@ process.genWeightsTable.namedWeightLabels = named_weights
 
 #### Scale out (TODO)
 
+The two previous steps can be unified into one as follows:
+```
+cmsDriver.py Configuration/GenProduction/python/pythia_fragment.py \
+    --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_gennanogen_cfg.py \
+    --eventcontent NANOAODGEN \
+    --datatier NANOAOD \
+    --conditions 130X_mcRun3_2023_realistic_postBPix_v5 \
+    --beamspot Realistic25ns13p6TeVEarly2023Collision \
+    --step LHE,GEN,NANOGEN \
+    --geometry DB:Extended \
+    --era Run3_2023 \
+    --customise Configuration/DataProcessing/Utils.addMonitoring \
+    --fileout file:gen.root \
+    --no_exec --mc -n 100
+```
+Also in this case, one has to add the columns that contain the weights. Moreover, the two following modifications are necessary:
+- move the gridpacks to ```/eos/user/g/gallim/www/EFTstudies/gridpacks``` and change the path to the first step to ```root://eosuser.cern.ch//eos/user/g/gallim/www/EFTstudies/gridpacks/<gpackname>``` when submitting on crab
+- for this to work, also change the line ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')``` to ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_xrootd.sh')```
+
+A ```crab_config.py``` file then has to be written (it is alread present in the repo for the dummy example) and production at scale can be submitted with:
+```
+crab submit -c crab_config.py
+```
+
 ### Creating NanoAOD files
 
 In this part we summarize the procedure to produce nanoAOD files for a sample (i.e. with reconstruction included). The procedure can be find in different twikis, for convenience we base ours on [this](https://indico.cern.ch/event/1500035/contributions/6575125/attachments/3091743/5476084/IITH_GEN_Tutorial.pdf).
@@ -95,8 +119,31 @@ cmsDriver.py Configuration/GenProduction/python/pythia_fragment.py \
     --eventcontent RAWSIM,LHE \
     --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE \
     --fileout file:gensim.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision \
-    --step LHE,GEN,SIM --geometry DB:Extended --era Run3_2023 --no_exec --mc -n 10
+    --step LHE,GEN,SIM --geometry DB:Extended --era Run3_2023 --no_exec --mc -n -1
 ```
+For the scaling to work, it is also convenient to make the number of events processed customizable via command line (this is taken from Davide's samples production for EFT ttHbb). We thus add these lines:
+```
+from FWCore.ParameterSet.VarParsing import VarParsing
+options = VarParsing ('analysis')
+options.register('jobNum', 0, VarParsing.multiplicity.singleton,VarParsing.varType.int,"jobNum")
+options.register('nEvents', 0, VarParsing.multiplicity.singleton,VarParsing.varType.int,"nEvents")
+options.parseArguments()
+```
+and change the following lines:
+```
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(options.nEvents))
+```
+```
+# Input source
+process.source = cms.Source(
+        "EmptySource",
+        firstLuminosityBlock  = cms.untracked.uint32(options.jobNum+1),
+        numberEventsInLuminosityBlock = cms.untracked.uint32(options.nEvents)
+)
+```
+```nEvents = cms.untracked.uint32(options.nEvents)``` in ```process.externalLHEProducer```.
+
+One can then start the production with:
 ```
 cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_gensim_cfg.py
 ```
@@ -112,7 +159,7 @@ cmsDriver.py \
     --conditions 130X_mcRun3_2023_realistic_postBPix_v5 \
     --step DIGI,DATAMIX,L1,DIGI2RAW,HLT:2023v12 \
     --procModifiers premix_stage2,siPixelQualityRawToDigi --geometry DB:Extended --filein file:gensim.root \
-    --datamix PreMix --era Run3_2023 --no_exec --mc -n 100
+    --datamix PreMix --era Run3_2023 --no_exec --mc -n -1
 ```
 ```
 cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_digi_cfg.py
@@ -124,7 +171,7 @@ cmsDriver.py \
     --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_reco_cfg.py \
     --eventcontent AODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier AODSIM \
     --fileout file:aod.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --step RAW2DIGI,L1Reco,RECO,RECOSIM \
-    --geometry DB:Extended --filein file:digi.root --era Run3_2023 --no_exec --mc -n 100
+    --geometry DB:Extended --filein file:digi.root --era Run3_2023 --no_exec --mc -n -1
 ```
 ```
 cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_reco_cfg.py
@@ -137,7 +184,7 @@ cmsDriver.py \
     --customise Configuration/DataProcessing/Utils.addMonitoring --datatier MINIAODSIM \
     --fileout file:miniaod.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 \
     --step PAT --geometry DB:Extended --filein file:aod.root --era Run3_2023 \
-    --no_exec --mc -n 100
+    --no_exec --mc -n -1
 ```
 ```
 cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_miniaod_cfg.py
@@ -149,7 +196,7 @@ cmsDriver.py  \
     --eventcontent NANOAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier NANOAODSIM \
     --conditions 133X_mcRun3_2023_realistic_postBPix_ForNanov13_v2 --step NANO \
     --scenario pp --era Run3_2023,run3_nanoAOD_124 --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_nanoaod_cfg.py \
-    --fileout file:nanoaod.root --filein file:miniaod.root --no_exec --mc -n 100
+    --fileout file:nanoaod.root --filein file:miniaod.root --no_exec --mc -n -1
 ```
 Also in this case, the different weights, taken from the ```reweight_card.dat```, can be saved by adding lines like
 ```
@@ -174,9 +221,15 @@ cmsRun ppH_Htt_SMEFTsim_topU3l_quadratic_nanoaod_cfg.py
 
 #### Scale out (TODO)
 
-Here we show how to use CRAB to produce NanoAOD with the relevant EFT weights. Relevant documentation can be found [here](https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3AdvancedTopic)
+Here we show how to use CRAB to produce NanoAOD with the relevant EFT weights. Relevant documentation can be found [here](https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3AdvancedTopic). As it can be seen in the link, the procedure consists in using a `scriptExe.sh` file where the different stages are chained. In order to control the number of events produced, extra lines to configure via command line are added to the config file of the first stage, while the others simpli take `-1` (i.e., hopefully, all the events coming from the previous steps).
 
 Important notes:
 
 - remember to move the gridpacks to ```/eos/user/g/gallim/www/EFTstudies/gridpacks``` and change the path to the first gensim step to ```root://eosuser.cern.ch//eos/user/g/gallim/www/EFTstudies/gridpacks/<gpackname>``` when submitting on crab
 - for this to work, also change the line ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')``` to ```scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_xrootd.sh')```
+
+## Other useful links
+
+- generators short exercise at CMS DAS ([link](https://fnallpc.github.io/generators/))
+- presentation for EFT samples production at LPC school ([link](https://indico.fnal.gov/event/68174/timetable/?view=standard#26-mc-generation-tutorial))
+- Ilaria Brivio's SMEFTsim tutorial ([link](https://github.com/IlariaBrivio/SMEFTsim_tutorial_June23))
