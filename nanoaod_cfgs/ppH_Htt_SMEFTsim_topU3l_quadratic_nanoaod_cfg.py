@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: --eventcontent NANOAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier NANOAODSIM --conditions 133X_mcRun3_2023_realistic_postBPix_ForNanov13_v2 --step NANO --scenario pp --era Run3_2023,run3_nanoAOD_124 --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_nanoaod_cfg.py --fileout file:nanoaod.root --filein file:miniaod.root --no_exec --mc -n 10
+# with command line options: --eventcontent NANOAODSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier NANOAODSIM --conditions 133X_mcRun3_2023_realistic_postBPix_ForNanov13_v2 --step NANO --scenario pp --era Run3_2023,run3_nanoAOD_124 --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_nanoaod_cfg.py --fileout file:nanoaod.root --filein file:miniaod.root --no_exec --mc -n -1
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run3_2023_cff import Run3_2023
@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10),
+    input = cms.untracked.int32(-1),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -67,7 +67,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('--eventcontent nevts:10'),
+    annotation = cms.untracked.string('--eventcontent nevts:-1'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -82,8 +82,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         filterName = cms.untracked.string('')
     ),
     fileName = cms.untracked.string('file:nanoaod.root'),
-    outputCommands = process.NANOAODSIMEventContent.outputCommands,
-    fakeNameForCrab = cms.untracked.bool(True)
+    outputCommands = process.NANOAODSIMEventContent.outputCommands
 )
 
 # Additional output definition

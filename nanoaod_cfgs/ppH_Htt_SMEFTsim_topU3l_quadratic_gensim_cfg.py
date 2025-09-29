@@ -5,6 +5,12 @@
 # with command line options: Configuration/GenProduction/python/pythia_fragment.py --python_filename ppH_Htt_SMEFTsim_topU3l_quadratic_gensim_cfg.py --eventcontent RAWSIM,LHE --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE --fileout file:gensim.root --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision --step LHE,GEN,SIM --geometry DB:Extended --era Run3_2023 --no_exec --mc -n 10
 import FWCore.ParameterSet.Config as cms
 
+from FWCore.ParameterSet.VarParsing import VarParsing
+options = VarParsing ('analysis')
+options.register('jobNum', 0, VarParsing.multiplicity.singleton,VarParsing.varType.int,"jobNum")
+options.register('nEvents', 0, VarParsing.multiplicity.singleton,VarParsing.varType.int,"nEvents")
+options.parseArguments()
+
 from Configuration.Eras.Era_Run3_2023_cff import Run3_2023
 
 process = cms.Process('SIM',Run3_2023)
@@ -25,44 +31,45 @@ process.load('Configuration.StandardSequences.SimIdeal_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
-process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10),
-    output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
-)
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(options.nEvents))
 
 # Input source
-process.source = cms.Source("EmptySource")
+process.source = cms.Source(
+        "EmptySource",
+        firstLuminosityBlock  = cms.untracked.uint32(options.jobNum+1),
+        numberEventsInLuminosityBlock = cms.untracked.uint32(options.nEvents)
+)
 
 process.options = cms.untracked.PSet(
-    FailPath = cms.untracked.vstring(),
-    IgnoreCompletely = cms.untracked.vstring(),
-    Rethrow = cms.untracked.vstring(),
-    SkipEvent = cms.untracked.vstring(),
-    accelerators = cms.untracked.vstring('*'),
-    allowUnscheduled = cms.obsolete.untracked.bool,
-    canDeleteEarly = cms.untracked.vstring(),
-    deleteNonConsumedUnscheduledModules = cms.untracked.bool(True),
-    dumpOptions = cms.untracked.bool(False),
-    emptyRunLumiMode = cms.obsolete.untracked.string,
-    eventSetup = cms.untracked.PSet(
-        forceNumberOfConcurrentIOVs = cms.untracked.PSet(
-            allowAnyLabel_=cms.required.untracked.uint32
-        ),
-        numberOfConcurrentIOVs = cms.untracked.uint32(0)
-    ),
-    fileMode = cms.untracked.string('FULLMERGE'),
-    forceEventSetupCacheClearOnNewRun = cms.untracked.bool(False),
-    holdsReferencesToDeleteEarly = cms.untracked.VPSet(),
-    makeTriggerResults = cms.obsolete.untracked.bool,
-    modulesToIgnoreForDeleteEarly = cms.untracked.vstring(),
-    numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(0),
-    numberOfConcurrentRuns = cms.untracked.uint32(1),
-    numberOfStreams = cms.untracked.uint32(0),
-    numberOfThreads = cms.untracked.uint32(1),
-    printDependencies = cms.untracked.bool(False),
-    sizeOfStackForThreadsInKB = cms.optional.untracked.uint32,
-    throwIfIllegalParameter = cms.untracked.bool(True),
-    wantSummary = cms.untracked.bool(False)
+    #FailPath = cms.untracked.vstring(),
+    #IgnoreCompletely = cms.untracked.vstring(),
+    #Rethrow = cms.untracked.vstring(),
+    #SkipEvent = cms.untracked.vstring(),
+    #accelerators = cms.untracked.vstring('*'),
+    #allowUnscheduled = cms.obsolete.untracked.bool,
+    #canDeleteEarly = cms.untracked.vstring(),
+    #deleteNonConsumedUnscheduledModules = cms.untracked.bool(True),
+    #dumpOptions = cms.untracked.bool(False),
+    #emptyRunLumiMode = cms.obsolete.untracked.string,
+    #eventSetup = cms.untracked.PSet(
+    #    forceNumberOfConcurrentIOVs = cms.untracked.PSet(
+    #        allowAnyLabel_=cms.required.untracked.uint32
+    #    ),
+    #    numberOfConcurrentIOVs = cms.untracked.uint32(0)
+    #),
+    #fileMode = cms.untracked.string('FULLMERGE'),
+    #forceEventSetupCacheClearOnNewRun = cms.untracked.bool(False),
+    #holdsReferencesToDeleteEarly = cms.untracked.VPSet(),
+    #makeTriggerResults = cms.obsolete.untracked.bool,
+    #modulesToIgnoreForDeleteEarly = cms.untracked.vstring(),
+    #numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(0),
+    #numberOfConcurrentRuns = cms.untracked.uint32(1),
+    #numberOfStreams = cms.untracked.uint32(0),
+    #numberOfThreads = cms.untracked.uint32(1),
+    #printDependencies = cms.untracked.bool(False),
+    #sizeOfStackForThreadsInKB = cms.optional.untracked.uint32,
+    #throwIfIllegalParameter = cms.untracked.bool(True),
+    #wantSummary = cms.untracked.bool(False)
 )
 
 # Production Info
@@ -175,7 +182,7 @@ process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     #args = cms.vstring('/afs/cern.ch/work/g/gallim/Postdoc/Generation/SBI-Htt-EFT/genproductions_scripts/bin/MadGraph5_aMCatNLO/ppH_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
     args = cms.vstring('root://eosuser.cern.ch//eos/user/g/gallim/www/EFTstudies/gridpacks/ppH_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
     #args = cms.vstring('/eos/user/g/gallim/www/EFTstudies/gridpacks/ppH_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
-    nEvents = cms.untracked.uint32(10),
+    nEvents = cms.untracked.uint32(options.nEvents),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
     #scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')
