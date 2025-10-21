@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: Configuration/GenProduction/python/nomerge_pythia_fragment.py --python_filename VBF_Htt_SMEFTsim_topU3l_quadratic_gennanogen_cfg.py --eventcontent NANOAODGEN --datatier NANOAOD --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision --step LHE,GEN,NANOGEN --geometry DB:Extended --era Run3_2023 --customise Configuration/DataProcessing/Utils.addMonitoring --fileout file:gen.root --no_exec --mc -n 100
+# with command line options: Configuration/GenProduction/python/nomerge_tauola_fragment.py --python_filename VBF_Htt_SMEFTsim_topU3l_quadratic_gennanogen_cfg.py --eventcontent NANOAODGEN --datatier NANOAOD --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision --step LHE,GEN,NANOGEN --geometry DB:Extended --era Run3_2023 --customise Configuration/DataProcessing/Utils.addMonitoring --fileout file:gen.root --no_exec --mc -n 5000
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run3_2023_cff import Run3_2023
@@ -25,7 +25,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100),
+    input = cms.untracked.int32(5000),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -66,7 +66,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('Configuration/GenProduction/python/nomerge_pythia_fragment.py nevts:100'),
+    annotation = cms.untracked.string('Configuration/GenProduction/python/nomerge_tauola_fragment.py nevts:5000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -95,6 +95,17 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '130X_mcRun3_2023_realistic_postBPix_v5', '')
 
 process.generator = cms.EDFilter("Pythia8HadronizerFilter",
+    ExternalDecays = cms.PSet(
+        Tauola = cms.untracked.PSet(
+            InputCards = cms.PSet(
+                mdtau = cms.int32(0),
+                pjak1 = cms.int32(0),
+                pjak2 = cms.int32(0)
+            ),
+            UseTauolaPolarization = cms.bool(True)
+        ),
+        parameterSets = cms.vstring('Tauola')
+    ),
     PythiaParameters = cms.PSet(
         parameterSets = cms.vstring(
             'pythia8CommonSettings',
@@ -136,6 +147,7 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
             'ParticleDecays:allowPhotonRadiation = on'
         )
     ),
+    UseExternalGenerators = cms.untracked.bool(True),
     comEnergy = cms.double(13600.0),
     filterEfficiency = cms.untracked.double(1.0),
     maxEventsToPrint = cms.untracked.int32(1),
@@ -145,11 +157,11 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
 
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    args = cms.vstring('root://eosuser.cern.ch//eos/user/g/gallim/www/EFTstudies/gridpacks/VBF_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
-    nEvents = cms.untracked.uint32(100),
+    args = cms.vstring('/srv/VBF_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
+    nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
-    scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_xrootd.sh')
+    scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')
 )
 
 
@@ -220,6 +232,10 @@ named_weights = [
     "rw0018",
     "rw0019",
     "rw0020",
+    "rw0021",
+    "rw0022",
+    "rw0023",
+    "rw0024",
 ]
 process.genWeightsTable.namedWeightIDs = named_weights
 process.genWeightsTable.namedWeightLabels = named_weights
