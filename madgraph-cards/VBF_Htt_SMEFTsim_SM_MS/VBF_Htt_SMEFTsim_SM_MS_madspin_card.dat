@@ -1,0 +1,5 @@
+set spinmode madspin
+
+decay h > ta+ ta-
+
+launch
