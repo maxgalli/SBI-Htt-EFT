@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [ ! -d genproductions_scripts ]; then
-  git clone https://gitlab.cern.ch/cms-gen/genproductions_scripts.git
-fi
-
 # in case this is not already done, setup cms packaging commands
 . /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=el8_amd64_gcc11

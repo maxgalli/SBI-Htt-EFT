@@ -20,15 +20,23 @@ nanoaod files for a certain process. We will consider as an example ```ppH_Htt_S
 The creation of gridpacks follows the standard procedure explained [here](https://cms-generators.docs.cern.ch/how-to-produce-gridpacks/mg5-amcnlo/). The MG cards are thus stored inside ```madgraph-cards```, divided per process, with the naming scheme required by the genproduction scripts.
 First, access the correct path:
 ```
-cd genproductions_scripts/bin/MadGraph5_aMCatNLO
+cd gridpack_space
 ```
 
-As exaplined in the documentation, gridpacks for Run 3 should be produced using ```cmssw-el8```. Following the instructions [here](https://cms-sw.github.io/singularity.html), on lxplus we just activate it by typing ```cmssw-el8```.
+Get the model we will use from this public lxplus directory:
+```
+/afs/cern.ch/user/z/zhaom/public/SMEFTsim_topU3l_MwScheme_UFO_fixed.tar.gz
+```
+This model tarball is the same as the one you get from ```cms-project-generators.web.cern.ch``` but with a parameter renamed which causes MadSpin to fail to compile. Go into ```custom_model_gridpack_generation.sh``` and replace this line with the path to the model tarball you just got:
+```
+SMEFT_UFO_TARBALL="/eos/user/z/zhaom/htautau/samples/SBI-Htt-EFT/models/SMEFTsim_topU3l_MwScheme_UFO_fixed.tar.gz"
+```
+As explained in the documentation, gridpacks for Run 3 should be produced using ```cmssw-el8```. Following the instructions [here](https://cms-sw.github.io/singularity.html), on lxplus we just activate it by typing ```cmssw-el8```.
 To generate the gridpack we then run:
 ```
-./gridpack_generation.sh ppH_Htt_SMEFTsim_topU3l_quadratic ../../../madgraph-cards/ppH_Htt_SMEFTsim_topU3l_quadratic
+./custom_model_gridpack_generation.sh` VBF_Htt_SMEFTsim_topU3l_quadratic_MS ../madgraph-cards/VBF_Htt_SMEFTsim_topU3l_quadratic_MS
 ```
-This will produce a gridpack called ```ppH_Htt_SMEFTsim_topU3l_quadratic_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz```.
+This script is modified from the ```mg35x``` from the genproductions github. Note that the same branch from the gitlab does not work right now. This script works just fine even if you don't use MadSpin, same with the model above. This will produce a gridpack called ```VBF_Htt_SMEFTsim_topU3l_quadratic_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz```.
 Note that the procedure runs locally; in order to run this procedure on HTCondor, check out the documentation for ```submit_condor_gridpack_generation.sh```.
 
 ### Creating EDM GEN files
