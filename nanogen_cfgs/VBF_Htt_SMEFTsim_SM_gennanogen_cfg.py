@@ -157,8 +157,7 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
 
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    args = cms.vstring('/eos/user/z/zhaom/htautau/samples/SBI-Htt-EFT/genproductions_mg35x_gh/bin/MadGraph5_aMCatNLO/VBF_Htt_SMEFTsim_topU3l_quadratic_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
-    #args = cms.vstring('/srv/VBF_Htt_SMEFTsim_topU3l_quadratic_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
+    args = cms.vstring('/srv/VBF_Htt_SMEFTsim_SM_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
     nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
@@ -210,33 +209,3 @@ process = addMonitoring(process)
 from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEarlyDelete
 process = customiseEarlyDelete(process)
 # End adding early deletion
-
-named_weights = [
-    "rw0000",
-    "rw0001",
-    "rw0002",
-    "rw0003",
-    "rw0004",
-    "rw0005",
-    "rw0006",
-    "rw0007",
-    "rw0008",
-    "rw0009",
-    "rw0010",
-    "rw0011",
-    "rw0012",
-    "rw0013",
-    "rw0014",
-    "rw0015",
-    "rw0016",
-    "rw0017",
-    "rw0018",
-    "rw0019",
-    "rw0020",
-    "rw0021",
-    "rw0022",
-    "rw0023",
-    "rw0024",
-]
-process.genWeightsTable.namedWeightIDs = named_weights
-process.genWeightsTable.namedWeightLabels = named_weights
