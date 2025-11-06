@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: Configuration/GenProduction/python/nomerge_tauola_fragment.py --python_filename VBF_Htt_SMEFTsim_topU3l_quadratic_gennanogen_cfg.py --eventcontent NANOAODGEN --datatier NANOAOD --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision --step LHE,GEN,NANOGEN --geometry DB:Extended --era Run3_2023 --customise Configuration/DataProcessing/Utils.addMonitoring --fileout file:gen.root --no_exec --mc -n 5000
+# with command line options: Configuration/GenProduction/python/nomerge_tauola_fragment.py --python_filename VBF_Htt_SMEFTsim_topU3l_quadratic_gennanogen_cfg.py --eventcontent NANOAODGEN --datatier NANOAOD --conditions 130X_mcRun3_2023_realistic_postBPix_v5 --beamspot Realistic25ns13p6TeVEarly2023Collision --step LHE,GEN,NANOGEN --geometry DB:Extended --era Run3_2023 --customise Configuration/DataProcessing/Utils.addMonitoring --fileout file:gen.root --no_exec --mc -n 10000
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run3_2023_cff import Run3_2023
@@ -25,7 +25,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(5000),
+    input = cms.untracked.int32(10000),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -66,7 +66,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('Configuration/GenProduction/python/nomerge_tauola_fragment.py nevts:5000'),
+    annotation = cms.untracked.string('Configuration/GenProduction/python/nomerge_tauola_fragment.py nevts:10000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -157,9 +157,9 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
 
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    args = cms.vstring('/eos/user/z/zhaom/htautau/samples/SBI-Htt-EFT/genproductions_mg35x_gh/bin/MadGraph5_aMCatNLO/VBF_Htt_SMEFTsim_topU3l_quadratic_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
-    #args = cms.vstring('/srv/VBF_Htt_SMEFTsim_topU3l_quadratic_MS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
-    nEvents = cms.untracked.uint32(5000),
+    args = cms.vstring('/srv/VBF_Htt_SMEFTsim_topU3l_quadratic_noMS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
+    #args = cms.vstring('/eos/user/z/zhaom/htautau/samples/SBI-Htt-EFT/genproductions_mg35x_gh/bin/MadGraph5_aMCatNLO/VBF_Htt_SMEFTsim_topU3l_quadratic_noMS_el8_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'),
+    nEvents = cms.untracked.uint32(10000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
     scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh')
