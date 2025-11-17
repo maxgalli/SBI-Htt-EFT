@@ -8,6 +8,6 @@ define vl = ve vm
 define vl~ = ve~ vm~
 define q = u u~ d d~ s s~ c c~ b b~
 
-generate p p > h q q, h > ta+ ta- NP=1 SMHLOOP=0 QCD=0 $ w+ w- z
+generate p p > h q q $ w+ w- z QED=4 QCD=0 NP<=1, h > ta+ ta- NP<=1
 
 output VBF_Htt_SMEFTsim_topU3l_quadratic_noMS -nojpeg
