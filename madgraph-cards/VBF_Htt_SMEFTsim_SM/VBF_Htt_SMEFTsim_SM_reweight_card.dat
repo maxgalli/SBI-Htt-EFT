@@ -1,9 +1,0 @@
-change rwgt_dir rwgt
-launch --rwgt_name=rw0000
-set cHbox 0.0
-set cHG 0.0
-set ceHRe 0.0
-launch --rwgt_name=rw0001
-set cHbox 0.5
-set cHG 0.0
-set ceHRe 0.0
