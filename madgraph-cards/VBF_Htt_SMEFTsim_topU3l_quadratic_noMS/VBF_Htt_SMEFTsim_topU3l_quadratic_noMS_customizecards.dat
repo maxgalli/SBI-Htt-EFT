@@ -1,4 +1,4 @@
 set param_card cHbox 1.0
-set param_card cHD 1.0
+set param_card cHDD 1.0
 set param_card ceHRe 1.0
 set param_card ceHIm 1.0

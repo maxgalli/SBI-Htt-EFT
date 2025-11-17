@@ -1,126 +1,96 @@
 change rwgt_dir rwgt
-launch --rwgt_name=rw0000
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 0.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 0.0
 set ceHIm 0.0
-launch --rwgt_name=rw0001
+launch --rwgt_name=cHbox_1p0_cHDD_0p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 1.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 0.0
 set ceHIm 0.0
-launch --rwgt_name=rw0002
+launch --rwgt_name=cHbox_0p0_cHDD_1p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 0.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 0.0
 set ceHIm 0.0
-launch --rwgt_name=rw0003
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_1p0_ceHIm_0p0
 set cHbox 0.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 1.0
 set ceHIm 0.0
-launch --rwgt_name=rw0004
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_0p0_ceHIm_1p0
 set cHbox 0.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 0.0
 set ceHIm 1.0
-launch --rwgt_name=rw0005
+launch --rwgt_name=cHbox_1p0_cHDD_1p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 1.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 0.0
 set ceHIm 0.0
-launch --rwgt_name=rw0006
+launch --rwgt_name=cHbox_1p0_cHDD_0p0_ceHRe_1p0_ceHIm_0p0
 set cHbox 1.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 1.0
 set ceHIm 0.0
-launch --rwgt_name=rw0007
+launch --rwgt_name=cHbox_1p0_cHDD_0p0_ceHRe_0p0_ceHIm_1p0
 set cHbox 1.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 0.0
 set ceHIm 1.0
-launch --rwgt_name=rw0008
+launch --rwgt_name=cHbox_0p0_cHDD_1p0_ceHRe_1p0_ceHIm_0p0
 set cHbox 0.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 1.0
 set ceHIm 0.0
-launch --rwgt_name=rw0009
+launch --rwgt_name=cHbox_0p0_cHDD_1p0_ceHRe_0p0_ceHIm_1p0
 set cHbox 0.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 0.0
 set ceHIm 1.0
-launch --rwgt_name=rw0010
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_1p0_ceHIm_1p0
 set cHbox 0.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 1.0
 set ceHIm 1.0
-launch --rwgt_name=rw0011
+launch --rwgt_name=cHbox_1p0_cHDD_1p0_ceHRe_1p0_ceHIm_0p0
 set cHbox 1.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 1.0
 set ceHIm 0.0
-launch --rwgt_name=rw0012
+launch --rwgt_name=cHbox_1p0_cHDD_1p0_ceHRe_0p0_ceHIm_1p0
 set cHbox 1.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 0.0
 set ceHIm 1.0
-launch --rwgt_name=rw0013
+launch --rwgt_name=cHbox_1p0_cHDD_0p0_ceHRe_1p0_ceHIm_1p0
 set cHbox 1.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 1.0
 set ceHIm 1.0
-launch --rwgt_name=rw0014
+launch --rwgt_name=cHbox_0p0_cHDD_1p0_ceHRe_1p0_ceHIm_1p0
 set cHbox 0.0
-set cHD 1.0
+set cHDD 1.0
 set ceHRe 1.0
 set ceHIm 1.0
-launch --rwgt_name=rw0015
-set cHbox 0.5
-set cHD 0.5
-set ceHRe 0.5
-set ceHIm 0.5
-launch --rwgt_name=rw0016
-set cHbox 2.0
-set cHD 2.0
-set ceHRe 2.0
-set ceHIm 2.0
-launch --rwgt_name=rw0017
-set cHbox 2.0
-set cHD 2.0
-set ceHRe 0.0
-set ceHIm 0.0
-launch --rwgt_name=rw0018
-set cHbox 0.0
-set cHD 0.0
-set ceHRe 2.0
-set ceHIm 2.0
-launch --rwgt_name=rw0019
-set cHbox 0.5
-set cHD 0.5
-set ceHRe 0.0
-set ceHIm 0.0
-launch --rwgt_name=rw0020
-set cHbox 0.0
-set cHD 0.0
-set ceHRe 0.5
-set ceHIm 0.5
-launch --rwgt_name=rw0021
+launch --rwgt_name=cHbox_10p0_cHDD_0p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 10.0
-set cHD 10.0
-set ceHRe 10.0
-set ceHIm 10.0
-launch --rwgt_name=rw0022
-set cHbox 100.0
-set cHD 100.0
-set ceHRe 100.0
-set ceHIm 100.0
-launch --rwgt_name=rw0023
-set cHbox 0.0
-set cHD 0.0
+set cHDD 0.0
 set ceHRe 0.0
-set ceHIm 10.0
-launch --rwgt_name=rw0024
+set ceHIm 0.0
+launch --rwgt_name=cHbox_0p0_cHDD_10p0_ceHRe_0p0_ceHIm_0p0
 set cHbox 0.0
-set cHD 0.0
+set cHDD 10.0
+set ceHRe 0.0
+set ceHIm 0.0
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_10p0_ceHIm_0p0
+set cHbox 0.0
+set cHDD 0.0
+set ceHRe 10.0
+set ceHIm 0.0
+launch --rwgt_name=cHbox_0p0_cHDD_0p0_ceHRe_0p0_ceHIm_10p0
+set cHbox 0.0
+set cHDD 0.0
 set ceHRe 0.0
 set ceHIm 10.0
